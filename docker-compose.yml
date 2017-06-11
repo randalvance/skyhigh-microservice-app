@@ -1,0 +1,53 @@
+version: '2'
+services:
+  skyhigh-web:
+    image: 'skyhigh-web'
+    container_name: 'skyhigh-web-instance'
+    ports:
+     - '8001:80'
+  skyhigh-services-enrollment:
+    image: 'skyhigh-services-enrollment'
+    container_name: 'skyhigh-services-enrollment-instance'
+    ports:
+     - '3001:3001'
+    depends_on:
+     - mongo
+     - rabbitmq
+  skyhigh-services-students:
+    image: 'skyhigh-services-students'
+    container_name: 'skyhigh-services-students-instance'
+    ports:
+     - '8181:80'
+    depends_on:
+     - postgres
+     - rabbitmq
+    environment:
+     - ConnectionStrings:DefaultConnection=Host=skyhigh-students-db;Database=skyhigh-students-db;Username=randalvance;Password=P@ssw0rd
+  skyhigh-services-subjects:
+    image: 'skyhigh-services-subjects'
+    container_name: 'skyhigh-services-subjects-instance'
+    ports:
+     - '8182:80'
+    depends_on:
+     - rabbitmq
+  postgres:
+    image: 'postgres'
+    container_name: 'skyhigh-students-db'
+    ports:
+     - '5432:5432'
+    environment:
+     - POSTGRES_USER=randalvance
+     - POSTGRES_PASSWORD=P@ssw0rd
+     - POSTGRES_DB=skyhigh-students-db
+  mongo:
+    image: 'mongo'
+    container_name: 'skyhigh-enrollment-mongodb'
+    ports:
+     - '27017:27017'
+  rabbitmq:
+    image: 'rabbitmq'
+    container_name: 'skyhigh-rabbitmq'
+    hostname: 'skyhigh-rabbitmq'
+    ports:
+     - '5672:5672'
+     - '15672:15672'
