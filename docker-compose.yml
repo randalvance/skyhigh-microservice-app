@@ -1,20 +1,27 @@
 version: '2'
 services:
   skyhigh-web:
-    image: 'skyhigh-web'
+    image: 'randal/skyhigh-web'
     container_name: 'skyhigh-web-instance'
     ports:
      - '8001:80'
+    environment:
+     - STUDENTS_SERVICE_URL=http://localhost:8181
+     - SUBJECTS_SERVICE_URL=http://localhost:8182
+     - ENROLLMENTS_SERVICE_URL=http://localhost:3001
   skyhigh-services-enrollment:
-    image: 'skyhigh-services-enrollment'
+    image: 'randal/skyhigh-services-enrollment'
     container_name: 'skyhigh-services-enrollment-instance'
     ports:
      - '3001:3001'
+    environment:
+     - MONGO_HOSTNAME=mongo
+     - RABBITMQ_HOSTNAME=rabbitmq
     depends_on:
      - mongo
      - rabbitmq
   skyhigh-services-students:
-    image: 'skyhigh-services-students'
+    image: 'randal/skyhigh-services-students'
     container_name: 'skyhigh-services-students-instance'
     ports:
      - '8181:80'
@@ -23,11 +30,14 @@ services:
      - rabbitmq
     environment:
      - ConnectionStrings:DefaultConnection=Host=skyhigh-students-db;Database=skyhigh-students-db;Username=randalvance;Password=P@ssw0rd
+     - Endpoint:RabbitMqHostname=rabbitmq
   skyhigh-services-subjects:
-    image: 'skyhigh-services-subjects'
+    image: 'randal/skyhigh-services-subjects'
     container_name: 'skyhigh-services-subjects-instance'
     ports:
      - '8182:80'
+    environment:
+     - Endpoint:RabbitMqHostname=rabbitmq
     depends_on:
      - rabbitmq
   postgres:

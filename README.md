@@ -20,18 +20,18 @@ Checkout all the repositories.
 ## Web FrontEnd
 * Run `npm install`
 * Run `ng build --prod`
-* Run `docker build -t skyhigh-web .`
+* Run `docker build -t randal/skyhigh-web .`
 
 ## Enrollment Microservice
-* Run `docker build -t skyhigh-services-enrollment .`
+* Run `docker build -t randal/skyhigh-services-enrollment .`
 
 ## Students Microservice
 * Run `dotnet publish -o ./publish`
-* Run `docker build -t skyhigh-services-students .`
+* Run `docker build -t randal/skyhigh-services-students .`
 
 ## Subjects Microservice
 * Run `dotnet publish -o ./publish`
-* Run `docker build -t skyhigh-services-subjects .`
+* Run `docker build -t randal/skyhigh-services-subjects .`
 
 ## Running the Docker Containers
 After everything is installed, go to the root folder of this repository and run:
