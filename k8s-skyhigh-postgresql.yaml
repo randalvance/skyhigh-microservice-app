@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: skyhigh-postgresql-service
+  labels:
+    app: skyhigh-postgresql-service
+spec:
+  ports:
+  - port: 5432
+    protocol: TCP
+  selector:
+    app: skyhigh-postgresql-deployment
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: skyhigh-postgresql-deployment
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: skyhigh-postgresql-deployment
+    spec:
+      containers:
+      - name: skyhigh-postgresql-instance
+        image: postgres
+        ports:
+        - containerPort: 5432
+        env:
+        - name: POSTGRES_USER
+          value: randalvance
+        - name: POSTGRES_PASSWORD
+          value: P@ssw0rd
+        - name: POSTGRES_DB
+          value: skyhigh-students-db

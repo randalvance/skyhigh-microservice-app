@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: skyhigh-web-service
+  labels:
+    app: skyhigh-web-service
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+  selector:
+    app: skyhigh-web-deployment
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: skyhigh-web-deployment
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5
+  template:
+    metadata:
+      labels:
+        app: skyhigh-web-deployment
+    spec:
+      containers:
+      - name: skyhigh-web-instance
+        image: randal/skyhigh-web
+        ports:
+        - containerPort: 80
+        env:
+        - name: STUDENTS_SERVICE_URL
+          value: http://skyhigh-students2.southeastasia.cloudapp.azure.com
+        - name: SUBJECTS_SERVICE_URL
+          value: http://skyhigh-subjects2.southeastasia.cloudapp.azure.com
+        - name: ENROLLMENTS_SERVICE_URL
+          value: http://skyhigh-enrollment2.southeastasia.cloudapp.azure.com

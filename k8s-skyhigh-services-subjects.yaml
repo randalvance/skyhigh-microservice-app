@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: skyhigh-subjects-service
+  labels:
+    app: skyhigh-subjects-service
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+  selector:
+    app: skyhigh-subjects-deployment
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: skyhigh-subjects-deployment
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: skyhigh-subjects-deployment
+    spec:
+      containers:
+      - name: skyhigh-subjects-instance
+        image: randal/skyhigh-services-subjects
+        ports:
+        - containerPort: 80
+        env:
+        - name: Endpoint__RabbitMqHostname
+          value: 10.0.181.55

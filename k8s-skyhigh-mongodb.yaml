@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: skyhigh-mongo-service
+  labels:
+    app: skyhigh-mongo-service
+spec:
+  ports:
+  - port: 27017
+    protocol: TCP
+  selector:
+    app: skyhigh-mongo-deployment
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: skyhigh-mongo-deployment
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: skyhigh-mongo-deployment
+    spec:
+      containers:
+      - name: skyhigh-mongo-instance
+        image: mongo
+        ports:
+        - containerPort: 27017
